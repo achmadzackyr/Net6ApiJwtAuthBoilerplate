@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace Net6ApiAuthBoilerplate.Helpers
 {
-    public class Hasher
+    public class AuthHelper
     {
         public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -30,7 +30,8 @@ namespace Net6ApiAuthBoilerplate.Helpers
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, "Admin")
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secret));

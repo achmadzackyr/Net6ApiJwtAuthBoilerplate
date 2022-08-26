@@ -22,7 +22,7 @@ namespace Net6ApiAuthBoilerplate.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
-            new Hasher().CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            new AuthHelper().CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.Username = request.Username;
             user.PasswordSalt = passwordSalt;
@@ -39,12 +39,12 @@ namespace Net6ApiAuthBoilerplate.Controllers
                 return BadRequest("User not found");
             }
 
-            if(!new Hasher().VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            if(!new AuthHelper().VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return BadRequest("Wrong Password");
             }
 
-            string token = new Hasher().CreateToken(user, _configuration.GetSection("AppSettings:Token").Value);
+            string token = new AuthHelper().CreateToken(user, _configuration.GetSection("AppSettings:Token").Value);
             
             return Ok(token);
         }

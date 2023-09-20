@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Net6ApiAuthBoilerplate.Models.Dto;
 using Net6ApiAuthBoilerplate.Models.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -44,6 +45,18 @@ namespace Net6ApiAuthBoilerplate.Helpers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+
+        public RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now
+            };
+
+            return refreshToken;
         }
     }
 }
